@@ -19,6 +19,7 @@
 *.aspx text eol=crlf encoding=UTF-8
 *.cshtm text eol=crlf encoding=UTF-8
 *.cshtml text eol=crlf encoding=UTF-8
+*.razor text eol=crlf encoding=UTF-8
 *.vbhtm text eol=crlf encoding=UTF-8
 *.vbhtml text eol=crlf encoding=UTF-8
 
