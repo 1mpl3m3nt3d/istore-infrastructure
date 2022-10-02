@@ -17,6 +17,7 @@ public static class AuthorizationExtensions
             .AddJwtBearer(AuthScheme.Internal, options =>
             {
                 options.Authority = authority;
+                options.Audience = siteAudience;
 
                 options.RequireHttpsMetadata = false;
 

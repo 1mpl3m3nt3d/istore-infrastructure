@@ -7,9 +7,9 @@ public static class ConfigurationExtensions
     public static void AddConfiguration(this WebApplicationBuilder builder)
     {
         builder.Services.Configure<ClientConfig>(
-            builder.Configuration.GetSection("Client"));
+            builder.Configuration.GetSection(ClientConfig.Client));
 
         builder.Services.Configure<AuthorizationConfig>(
-            builder.Configuration.GetSection("Authorization"));
+            builder.Configuration.GetSection(AuthorizationConfig.Authorization));
     }
 }
