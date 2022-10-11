@@ -1,9 +1,7 @@
-global using System;
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Net;
 global using System.Reflection;
 global using System.Text;
-global using System.Threading.Tasks;
 
 global using IdentityModel.Client;
 
