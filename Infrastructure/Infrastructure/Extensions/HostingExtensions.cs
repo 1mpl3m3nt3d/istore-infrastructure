@@ -1,3 +1,5 @@
+using Infrastructure.Configuration;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpLogging;
 
@@ -5,17 +7,18 @@ namespace Infrastructure.Extensions;
 
 public static class HostingExtensions
 {
-    public static WebApplicationBuilder AddNginxConfiguration(this WebApplicationBuilder builder, IConfiguration? configuration = null)
+    public static WebApplicationBuilder AddNginxConfiguration(this WebApplicationBuilder builder)
     {
-        configuration ??= builder.Configuration;
+        var nginxConfig = builder.Configuration.Get<NginxConfig>();
+        var infraConfig = builder.Configuration.Get<InfrastructureConfig>();
 
-        if (configuration["Nginx:UseNginx"] == "true")
+        if (nginxConfig.UseNginx == "true")
         {
             try
             {
-                if (configuration["Nginx:UseInitFile"] == "true")
+                if (nginxConfig.UseInitFile == "true")
                 {
-                    var initFile = configuration["Nginx:InitFilePath"] ?? "/tmp/app-initialized";
+                    var initFile = nginxConfig.InitFilePath ?? "/tmp/app-initialized";
 
                     if (!File.Exists(initFile))
                     {
@@ -32,9 +35,9 @@ public static class HostingExtensions
 
             try
             {
-                if (configuration["Nginx:UseUnixSocket"] == "true")
+                if (nginxConfig.UseUnixSocket == "true")
                 {
-                    var unixSocket = configuration["Nginx:UnixSocketPath"] ?? "/tmp/nginx.socket";
+                    var unixSocket = nginxConfig.UnixSocketPath ?? "/tmp/nginx.socket";
 
                     builder.WebHost.ConfigureKestrel(kestrel =>
                     {
@@ -43,9 +46,9 @@ public static class HostingExtensions
                     });
                 }
 
-                if (configuration["Nginx:UsePort"] == "true")
+                if (nginxConfig.UsePort == "true")
                 {
-                    var portParsed = int.TryParse(configuration["Nginx:Port"], out var port);
+                    var portParsed = int.TryParse(nginxConfig.Port, out var port);
 
                     if (portParsed)
                     {
@@ -64,7 +67,7 @@ public static class HostingExtensions
         }
         else
         {
-            var portEnv = configuration["PORT"] ?? Environment.GetEnvironmentVariable("PORT");
+            var portEnv = infraConfig.Port ?? Environment.GetEnvironmentVariable("PORT");
 
             try
             {
@@ -83,13 +86,13 @@ public static class HostingExtensions
                 }
                 else
                 {
-                    var identityUrl = configuration["IdentityUrl"];
+                    var baseUrl = infraConfig.BaseUrl ?? infraConfig.BasketApi ?? infraConfig.CatalogApi ?? infraConfig.GlobalUrl;
 
-                    if (identityUrl != null)
+                    if (baseUrl != null)
                     {
                         try
                         {
-                            var identityPort = new Uri(identityUrl)?.Port;
+                            var identityPort = new Uri(baseUrl)?.Port;
 
                             if (identityPort is int @port)
                             {
@@ -116,11 +119,11 @@ public static class HostingExtensions
         return builder;
     }
 
-    public static WebApplicationBuilder AddHttpLoggingConfiguration(this WebApplicationBuilder builder, IConfiguration? configuration = null)
+    public static WebApplicationBuilder AddHttpLoggingConfiguration(this WebApplicationBuilder builder)
     {
-        configuration ??= builder.Configuration;
+        var infraConfig = builder.Configuration.Get<InfrastructureConfig>();
 
-        if (configuration["HttpLogging"] == "true")
+        if (infraConfig.HttpLogging == "true")
         {
             builder.Services.AddHttpLogging(options =>
                 {

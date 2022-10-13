@@ -1,13 +1,14 @@
+using Infrastructure.Configuration;
 using Infrastructure.Identity;
 
 namespace Infrastructure.Extensions;
 
 public static class AuthorizationExtensions
 {
-    public static void AddAuthorization(this IServiceCollection services, IConfiguration configuration)
+    public static void AddAuthorization(this IServiceCollection services, AuthorizationConfig authConfig)
     {
-        var authority = configuration["Authorization:Authority"];
-        var siteAudience = configuration["Authorization:SiteAudience"];
+        var authority = authConfig.Authority;
+        var siteAudience = authConfig.SiteAudience;
 
         services
             .AddSingleton<IAuthorizationHandler, ScopeHandler>();
