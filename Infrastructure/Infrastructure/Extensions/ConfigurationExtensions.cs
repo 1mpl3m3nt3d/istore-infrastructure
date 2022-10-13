@@ -4,12 +4,19 @@ namespace Infrastructure.Extensions;
 
 public static class ConfigurationExtensions
 {
-    public static void AddConfiguration(this WebApplicationBuilder builder)
+    public static void AddConfiguration(this WebApplicationBuilder builder, IConfiguration? configuration = null)
     {
-        builder.Services.Configure<ClientConfig>(
-            builder.Configuration.GetSection(ClientConfig.Client));
+        configuration ??= builder.Configuration;
+
+        builder.Services.Configure<InfrastructureConfig>(configuration);
 
         builder.Services.Configure<AuthorizationConfig>(
-            builder.Configuration.GetSection(AuthorizationConfig.Authorization));
+            configuration.GetSection(AuthorizationConfig.Authorization));
+
+        builder.Services.Configure<ClientConfig>(
+            configuration.GetSection(ClientConfig.Client));
+
+        builder.Services.Configure<NginxConfig>(
+            configuration.GetSection(NginxConfig.Nginx));
     }
 }

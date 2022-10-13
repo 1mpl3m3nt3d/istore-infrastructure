@@ -12,13 +12,13 @@ public class InternalHttpClientService : IInternalHttpClientService
     private readonly IHttpClientFactory _clientFactory;
 
     public InternalHttpClientService(
-        IHttpClientFactory clientFactory,
+        IOptions<AuthorizationConfig> authConfig,
         IOptions<ClientConfig> clientConfig,
-        IOptions<AuthorizationConfig> authConfig)
+        IHttpClientFactory clientFactory)
     {
-        _clientFactory = clientFactory;
         _authConfig = authConfig.Value;
         _clientConfig = clientConfig.Value;
+        _clientFactory = clientFactory;
     }
 
     public async Task<TResponse> SendAsync<TResponse, TRequest>(string url, HttpMethod method, TRequest? content)
