@@ -64,7 +64,7 @@ public static class HostingExtensions
         }
         else
         {
-            var portEnv = Environment.GetEnvironmentVariable("PORT");
+            var portEnv = builder.Configuration["PORT"] ?? Environment.GetEnvironmentVariable("PORT");
 
             try
             {
