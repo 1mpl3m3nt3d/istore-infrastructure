@@ -8,13 +8,13 @@ public class NginxConfig
 
     public string UseInitFile { get; set; } = null!;
 
-    public string UsePort { get; set; } = null!;
-
     public string UseUnixSocket { get; set; } = null!;
+
+    public string UsePort { get; set; } = null!;
 
     public string InitFilePath { get; set; } = null!;
 
-    public string Port { get; set; } = null!;
-
     public string UnixSocketPath { get; set; } = null!;
+
+    public string Port { get; set; } = null!;
 }

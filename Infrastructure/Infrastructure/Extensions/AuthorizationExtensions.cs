@@ -5,10 +5,14 @@ namespace Infrastructure.Extensions;
 
 public static class AuthorizationExtensions
 {
-    public static void AddAuthorization(this IServiceCollection services, AuthorizationConfig authConfig)
+    public static void AddAuthorization(this WebApplicationBuilder builder)
     {
+        var authConfig = builder.Configuration.Get<AuthorizationConfig>();
+
         var authority = authConfig.Authority;
         var siteAudience = authConfig.SiteAudience;
+
+        var services = builder.Services;
 
         services
             .AddSingleton<IAuthorizationHandler, ScopeHandler>();

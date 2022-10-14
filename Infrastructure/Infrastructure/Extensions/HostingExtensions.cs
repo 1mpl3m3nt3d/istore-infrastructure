@@ -9,8 +9,8 @@ public static class HostingExtensions
 {
     public static WebApplicationBuilder AddNginxConfiguration(this WebApplicationBuilder builder)
     {
+        var appConfig = builder.Configuration.Get<AppConfig>();
         var nginxConfig = builder.Configuration.Get<NginxConfig>();
-        var infraConfig = builder.Configuration.Get<InfrastructureConfig>();
 
         if (nginxConfig.UseNginx == "true")
         {
@@ -67,7 +67,7 @@ public static class HostingExtensions
         }
         else
         {
-            var portEnv = infraConfig.Port ?? Environment.GetEnvironmentVariable("PORT");
+            var portEnv = Environment.GetEnvironmentVariable("PORT");
 
             try
             {
@@ -86,7 +86,7 @@ public static class HostingExtensions
                 }
                 else
                 {
-                    var baseUrl = infraConfig.BaseUrl ?? infraConfig.BasketApi ?? infraConfig.CatalogApi ?? infraConfig.GlobalUrl;
+                    var baseUrl = appConfig.BaseUrl ?? appConfig.GlobalUrl;
 
                     if (baseUrl != null)
                     {
@@ -121,9 +121,9 @@ public static class HostingExtensions
 
     public static WebApplicationBuilder AddHttpLoggingConfiguration(this WebApplicationBuilder builder)
     {
-        var infraConfig = builder.Configuration.Get<InfrastructureConfig>();
+        var appConfig = builder.Configuration.Get<AppConfig>();
 
-        if (infraConfig.HttpLogging == "true")
+        if (appConfig.HttpLogging == "true")
         {
             builder.Services.AddHttpLogging(options =>
                 {

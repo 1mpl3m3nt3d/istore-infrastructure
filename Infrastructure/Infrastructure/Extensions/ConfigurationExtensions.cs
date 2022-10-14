@@ -8,7 +8,8 @@ public static class ConfigurationExtensions
     {
         configuration ??= builder.Configuration;
 
-        builder.Services.Configure<InfrastructureConfig>(configuration);
+        builder.Services.Configure<AppConfig>(
+            configuration.GetSection(AppConfig.App));
 
         builder.Services.Configure<AuthorizationConfig>(
             configuration.GetSection(AuthorizationConfig.Authorization));
