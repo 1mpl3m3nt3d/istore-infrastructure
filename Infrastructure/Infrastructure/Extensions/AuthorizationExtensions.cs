@@ -7,7 +7,7 @@ public static class AuthorizationExtensions
 {
     public static void AddAuthorization(this WebApplicationBuilder builder)
     {
-        var authConfig = builder.Configuration.Get<AuthorizationConfig>();
+        var authConfig = builder.Configuration.GetSection(AuthorizationConfig.Authorization).Get<AuthorizationConfig>();
 
         var authority = authConfig.Authority;
         var siteAudience = authConfig.SiteAudience;

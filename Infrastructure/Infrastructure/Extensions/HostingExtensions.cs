@@ -6,8 +6,8 @@ public static class HostingExtensions
 {
     public static WebApplicationBuilder AddNginxConfiguration(this WebApplicationBuilder builder)
     {
-        var appConfig = builder.Configuration.Get<AppConfig>();
-        var nginxConfig = builder.Configuration.Get<NginxConfig>();
+        var appConfig = builder.Configuration.GetSection(AppConfig.App).Get<AppConfig>();
+        var nginxConfig = builder.Configuration.GetSection(NginxConfig.Nginx).Get<NginxConfig>();
 
         if (nginxConfig.UseNginx == "true")
         {
@@ -89,9 +89,9 @@ public static class HostingExtensions
                     {
                         try
                         {
-                            var identityPort = new Uri(baseUrl)?.Port;
+                            var basePort = new Uri(baseUrl)?.Port;
 
-                            if (identityPort is int @port)
+                            if (basePort is int @port)
                             {
                                 builder.WebHost.ConfigureKestrel(kestrel =>
                                 {
