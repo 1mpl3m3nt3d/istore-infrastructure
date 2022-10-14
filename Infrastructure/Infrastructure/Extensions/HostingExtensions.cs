@@ -1,8 +1,5 @@
 using Infrastructure.Configuration;
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpLogging;
-
 namespace Infrastructure.Extensions;
 
 public static class HostingExtensions
