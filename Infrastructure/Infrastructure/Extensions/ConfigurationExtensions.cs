@@ -1,4 +1,4 @@
-using Infrastructure.Configuration;
+using Infrastructure.Configurations;
 
 namespace Infrastructure.Extensions;
 

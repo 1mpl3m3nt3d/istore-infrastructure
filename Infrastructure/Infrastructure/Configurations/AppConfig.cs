@@ -1,4 +1,4 @@
-namespace Infrastructure.Configuration;
+namespace Infrastructure.Configurations;
 
 public class AppConfig
 {

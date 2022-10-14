@@ -1,4 +1,4 @@
-using Infrastructure.Configuration;
+using Infrastructure.Configurations;
 using Infrastructure.Identity;
 
 namespace Infrastructure.Extensions;
