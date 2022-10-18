@@ -1,4 +1,3 @@
-using Infrastructure.Exceptions;
 using Infrastructure.Services.Interfaces;
 
 namespace Infrastructure.Services;
@@ -51,7 +50,7 @@ public abstract class BaseDataService<T>
 
             _logger.LogError(ex, $"Transaction is rolled back");
 
-            throw new BusinessException(ex.Message, ex);
+            throw;
         }
     }
 
@@ -76,7 +75,7 @@ public abstract class BaseDataService<T>
 
             _logger.LogError(ex, $"Transaction is rolled back");
 
-            throw new BusinessException(ex.Message, ex);
+            throw;
         }
     }
 }

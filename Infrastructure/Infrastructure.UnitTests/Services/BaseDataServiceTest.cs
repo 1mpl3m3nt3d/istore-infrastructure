@@ -1,4 +1,3 @@
-using Infrastructure.Exceptions;
 using Infrastructure.UnitTests.Mocks;
 
 namespace Infrastructure.UnitTests.Services;
@@ -38,9 +37,9 @@ public class BaseDataServiceTest
         {
             result = await _mockService.RunWithReturnWithException();
         }
-        catch (BusinessException)
+        catch (Exception)
         {
-            // we should catch BusinessException if an exception happens in the ExecuteSafeAsync method
+            // ignore
         }
 
         // assert
@@ -84,9 +83,9 @@ public class BaseDataServiceTest
         {
             await _mockService.RunWithoutReturnWithException();
         }
-        catch (BusinessException)
+        catch (Exception)
         {
-            // we should catch BusinessException if an exception happens in the ExecuteSafeAsync method
+            // ignore
         }
 
         // assert
