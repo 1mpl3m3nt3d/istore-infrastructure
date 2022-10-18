@@ -1,3 +1,4 @@
+using Infrastructure.Exceptions;
 using Infrastructure.UnitTests.Mocks;
 
 namespace Infrastructure.UnitTests.Services;
@@ -27,12 +28,66 @@ public class BaseDataServiceTest
     }
 
     [Fact]
-    public async Task ExecuteSafeAsync_Failed()
+    public async Task ExecuteSafeAsyncWithResult_Failed()
+    {
+        // arrange
+        var result = false;
+
+        // act
+        try
+        {
+            result = await _mockService.RunWithReturnWithException();
+        }
+        catch (BusinessException)
+        {
+            // we should catch BusinessException if an exception happens in the ExecuteSafeAsync method
+        }
+
+        // assert
+        result.Should().BeFalse();
+        _dbContextTransaction.Verify(t => t.CommitAsync(CancellationToken.None), Times.Never);
+        _dbContextTransaction.Verify(t => t.RollbackAsync(CancellationToken.None), Times.Once);
+
+        _logger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((o, t) => o.ToString()!
+                    .Contains($"Transaction is rolled back")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()!),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteSafeAsyncWithResult_Success()
+    {
+        // arrange
+        var result = false;
+
+        // act
+        result = await _mockService.RunWithReturnWithoutException();
+
+        // assert
+        result.Should().BeTrue();
+        _dbContextTransaction.Verify(t => t.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _dbContextTransaction.Verify(t => t.RollbackAsync(It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ExecuteSafeAsyncWithoutResult_Failed()
     {
         // arrange
 
         // act
-        await _mockService.RunWithException();
+        try
+        {
+            await _mockService.RunWithoutReturnWithException();
+        }
+        catch (BusinessException)
+        {
+            // we should catch BusinessException if an exception happens in the ExecuteSafeAsync method
+        }
 
         // assert
         _dbContextTransaction.Verify(t => t.CommitAsync(CancellationToken.None), Times.Never);
@@ -50,12 +105,12 @@ public class BaseDataServiceTest
     }
 
     [Fact]
-    public async Task ExecuteSafeAsync_Success()
+    public async Task ExecuteSafeAsyncWithoutResult_Success()
     {
         // arrange
 
         // act
-        await _mockService.RunWithoutException();
+        await _mockService.RunWithoutReturnWithoutException();
 
         // assert
         _dbContextTransaction.Verify(t => t.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);

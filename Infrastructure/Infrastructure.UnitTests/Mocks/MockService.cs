@@ -9,13 +9,23 @@ public class MockService : BaseDataService<MockDbContext>
     {
     }
 
-    public async Task RunWithException()
+    public async Task<bool> RunWithReturnWithException()
     {
-        await ExecuteSafeAsync<bool>(() => throw new Exception());
+        return await ExecuteSafeAsync<bool>(() => throw new Exception());
     }
 
-    public async Task RunWithoutException()
+    public async Task<bool> RunWithReturnWithoutException()
     {
-        await ExecuteSafeAsync<bool>(() => Task.FromResult(true));
+        return await ExecuteSafeAsync<bool>(() => Task.FromResult(true));
+    }
+
+    public async Task RunWithoutReturnWithException()
+    {
+        await ExecuteSafeAsync(() => throw new Exception());
+    }
+
+    public async Task RunWithoutReturnWithoutException()
+    {
+        await ExecuteSafeAsync(() => Task.CompletedTask);
     }
 }
