@@ -1,3 +1,4 @@
+using Infrastructure.Exceptions;
 using Infrastructure.Services.Interfaces;
 
 namespace Infrastructure.Services;
@@ -49,6 +50,8 @@ public abstract class BaseDataService<T>
             await transaction.RollbackAsync(cancellationToken);
 
             _logger.LogError(ex, $"Transaction is rolled back");
+
+            throw new BusinessException(ex.Message, ex);
         }
     }
 
@@ -73,7 +76,7 @@ public abstract class BaseDataService<T>
 
             _logger.LogError(ex, $"Transaction is rolled back");
 
-            return default!;
+            throw new BusinessException(ex.Message, ex);
         }
     }
 }
